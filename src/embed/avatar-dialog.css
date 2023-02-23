@@ -1,0 +1,173 @@
+dialog {
+  --font-family: "游ゴシック", YuGothic, -apple-system, BlinkMacSystemFont,
+    Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+    Helvetica Neue, sans-serif;
+  --bg-color: #fff;
+  --btn-color: #fff;
+  --txt-color: #111;
+  --sub-txt-color: #888;
+  --ui-color: rgba(0, 0, 0, 0.5);
+  --ui-color-active: rgba(0, 0, 0, 0.8);
+  --ui-color-disable: rgba(0, 0, 0, 0.1);
+
+  font-family: var(--font-family);
+  padding: 2.4em;
+  min-width: 300px;
+  pointer-events: auto;
+  user-select: auto;
+  border-radius: 0px;
+  box-shadow: 0 12px 15px 0 rgb(0 0 0 / 25%);
+  color: var(--txt-color);
+  background: var(--bg-color);
+  background-clip: padding-box;
+  border: none;
+  transition: height, width 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.avatar-dialog-page {
+  display: none;
+}
+.avatar-dialog-page.active {
+  display: block;
+}
+input {
+  color: var(--txt-color);
+}
+input,
+input::placeholder,
+.placeholder {
+  font-weight: normal;
+  font-family: var(--font-family);
+}
+input::placeholder,
+.placeholder {
+  color: var(--sub-txt-color);
+}
+.button {
+  background: var(--ui-color);
+  transition: background 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  border: none;
+  font-size: 1rem;
+  color: var(--btn-color);
+}
+.button:hover {
+  background: var(--ui-color-active);
+}
+.button[disabled] {
+  background: var(--ui-color-disable);
+}
+.icon-button {
+  padding: 0.6rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.icon-button svg {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.avatar-dialog-back-button,
+.avatar-dialog-close-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 1.2rem;
+}
+.hide {
+  display: none !important;
+}
+
+#avatar-dialog-title {
+  font-size: 1.6rem;
+  line-height: 1.3;
+  font-weight: 300;
+  margin: 0 0 2.4rem 2em;
+}
+
+.avatar-type-button-list,
+.avatar-vrm-form,
+.save-pane {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 1rem;
+}
+
+.avatar-type-button,
+.avatar-form-button {
+  width: 198px;
+  height: 60px;
+}
+.avatar-type-hint {
+  margin: 1rem 0;
+  font-size: 0.8rem;
+  color: var(--sub-txt-color);
+  text-align: right;
+}
+.rpm-frame {
+  margin: 0;
+  border: none;
+  width: 1080px;
+  height: 800px;
+}
+@media all and (max-width: 799px) {
+  .rpm-frame {
+    width: 720px;
+    height: 1080px;
+  }
+}
+
+input[type="file"] {
+  display: none;
+}
+
+input[type="url"],
+.file-input-label {
+  width: 100%;
+  height: 2.5em;
+  border: 1px solid var(--ui-color);
+  padding: 0px 20px;
+  font-size: 1rem;
+  line-height: 1rem;
+  transition: border 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  box-sizing: border-box;
+  outline: none;
+}
+input[type="url"]:focus,
+input[type="url"].active,
+.file-input-label:focus,
+.file-input-label.active {
+  border: 3px solid var(--ui-color);
+}
+.file-input-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-right: 0px;
+}
+.file-input-button {
+  display: grid;
+  place-items: center;
+  width: fit-content;
+  height: 100%;
+  padding: 0 0.5em;
+}
+.loading-wrap,
+.failed-wrap {
+  display: grid;
+  place-items: center;
+}
+.loading-wrap svg,
+.failed-wrap svg {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+}
+.save-message,
+.save-sub-message {
+  text-align: center;
+  line-height: 1.5;
+}

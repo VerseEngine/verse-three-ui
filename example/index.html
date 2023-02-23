@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <style>
+      * {
+      }
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+    <script
+      async
+      src="https://cdn.jsdelivr.net/npm/es-module-shims@1.6.2/dist/es-module-shims.min.js"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.module.js",
+          "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/",
+          "@verseengine/three-touch-controller": "../node_modules/@verseengine/three-touch-controller/dist/esm/index.js",
+          "@verseengine/three-move-controller": "../node_modules/@verseengine/three-move-controller/dist/esm/index.js",
+          "@verseengine/three-xr-controller": "../node_modules/@verseengine/three-xr-controller/dist/esm/index.js",
+          "./setup": "./setup.js",
+          "./player-controller": "./player-controller.js",
+          "verse-three-ui": "../dist/esm/index.js"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as THREE from "three";
+      import { setupScene, createBridge } from "./setup";
+      import { PlayerController } from "./player-controller";
+
+      import {
+        register as registerUI,
+        Gui3D,
+        Gui3DVisibleSwitcher,
+      } from "verse-three-ui";
+      registerUI();
+
+      function createMockGuiHandlers() {
+        let isMicOn = false;
+        let bgmVolume = 0;
+        let voiceVolume = 0;
+        let isMirrorOn = false;
+        const mockWaitAndResult = async () => {
+          await new Promise((resolve, reject) => {
+            setTimeout(() => {
+              if (Math.random() <= 0.5) {
+                resolve();
+              } else {
+                reject(
+                  new Error(
+                    "Dummy errors, which are generated at a certain rate"
+                  )
+                );
+              }
+            }, 1500);
+          });
+        };
+        const listeners = [];
+        const onModified = () => listeners.forEach((f) => f());
+        return {
+          addModifiedListener: (f) => {
+            listeners.push(f);
+          },
+          isMicOn: () => isMicOn,
+          micOff: async () => {
+            isMicOn = false;
+            onModified();
+          },
+          micOn: async () => {
+            isMicOn = true;
+            onModified();
+          },
+          getBgmVolume: () => bgmVolume,
+          setBgmVolume: async (v) => (bgmVolume = v),
+          getVoiceVolume: () => voiceVolume,
+          setVoiceVolume: async (v) => (voiceVolume = v),
+          isMirrorOn: () => isMirrorOn,
+          mirrorOff: async () => {
+            isMirrorOn = false;
+            onModified();
+          },
+          mirrorOn: async () => {
+            isMirrorOn = true;
+            onModified();
+          },
+          setAvatarURL: async (url, fileData) => {
+            console.log(`Avatar URL:`, url, fileData);
+            await mockWaitAndResult();
+          },
+          setAvatarData: async (fileData) => {
+            console.log(`Avatar Data:`, fileData);
+            await mockWaitAndResult();
+          },
+        };
+      }
+      const mockGuiHandlers = createMockGuiHandlers();
+
+      function setupGui3D(xr, scene, container, camera, clickableObjects) {
+        const gui3d = new Gui3D({
+          isMirrorDisabled: false,
+          isMicDisabled: false,
+          isBgmDisabled: false,
+          isVoiceDisabled: false,
+        });
+        container.add(gui3d.object3D);
+        gui3d.setGuiHandlers(mockGuiHandlers);
+        mockGuiHandlers.addModifiedListener(() => gui3d.updateStates());
+        clickableObjects.push(...gui3d.clickableObjects);
+        /*
+          gui3d.visible = true;
+          gui3d.object3D.position.set(0, 1.5, -0.5);
+      */
+        return new Gui3DVisibleSwitcher(xr, gui3d.object3D, camera);
+      }
+      function setupGui2D() {
+        const gui2d = document.querySelector("gui-2d");
+        gui2d.setGuiHandlers(mockGuiHandlers);
+        mockGuiHandlers.addModifiedListener(() => gui2d.updateStates());
+
+        setTimeout(() => {
+          gui2d.ready();
+        }, 1000);
+      }
+
+      function createWorldObjects(
+        scene,
+        collisionObjects,
+        teleportTargetObjects
+      ) {
+        {
+          const o = createBridge();
+          o.rotateY(180 * (Math.PI / 180));
+          o.position.set(2, 0, -1.5);
+
+          scene.add(o);
+          teleportTargetObjects.push(o);
+        }
+        {
+          const wall = new THREE.Mesh(
+            new THREE.PlaneGeometry(10, 3, 1, 1),
+            new THREE.MeshLambertMaterial({
+              color: 0x5e5e5e,
+              side: THREE.DoubleSide,
+            })
+          );
+          wall.name = "wall-r";
+          wall.position.set(-2, 0.5, 0);
+          wall.rotation.y = Math.PI / 2;
+          scene.add(wall);
+          collisionObjects.push(wall);
+        }
+      }
+
+      const main = () => {
+        let collisionObjects = [];
+        let teleportTargetObjects = [];
+        let clickableObjects = [];
+
+        let ctx;
+        ctx = setupScene((dt) => {
+          playerController?.tick(dt);
+          gui3DSwitcher?.tick(dt);
+        }, true);
+        const { scene, renderer, cameraContainer, camera } = ctx;
+        createWorldObjects(scene, collisionObjects, teleportTargetObjects);
+        teleportTargetObjects.push(ctx.ground);
+
+        const playerObj = new THREE.Group();
+        playerObj.name = "playerObj";
+        playerObj.add(cameraContainer);
+        playerObj.position.z = 2;
+        scene.add(playerObj);
+
+        setupGui2D();
+        const gui3DSwitcher = setupGui3D(
+          renderer.xr,
+          scene,
+          playerObj,
+          camera,
+          clickableObjects
+        );
+
+        const getClickableObject = (el) => {
+          const m = clickableObjects.reduce((m, o) => {
+            m.set(o, true);
+            return m;
+          }, new Map());
+          do {
+            if (m.has(el)) {
+              return el;
+            }
+          } while (!!(el = el.parent));
+        };
+
+        const playerController = new PlayerController(
+          playerObj,
+          cameraContainer,
+          cameraContainer,
+          scene,
+          renderer,
+          camera,
+          {
+            getCollisionObjects: () => collisionObjects,
+            getInteractableObjects: () => clickableObjects,
+            getTeleportTargetObjects: () => teleportTargetObjects,
+            onCursorHover: (el) => {
+              getClickableObject(el)?.onHover?.();
+            },
+            onCursorLeave: (el) => {
+              getClickableObject(el)?.onLeave?.();
+            },
+            onSelectDown: (el, _point) => {
+              getClickableObject(el)?.onClick?.();
+            },
+          }
+        );
+
+        let lastPos = new THREE.Vector3();
+        renderer.xr.addEventListener("sessionstart", async () => {
+          lastPos.copy(ctx.camera.position);
+          const firstPersonOnlyLayer = 9;
+          const thirdPersonOnlyLayer = 10;
+          const camera = renderer.xr.getCamera();
+          while (Math.round(camera.position.y * 10) === 0) {
+            await new Promise((resolve) => setTimeout(resolve, 0));
+          }
+
+          // Laser pointer is displayed only on the first-person camera
+          for (const c of [camera, ...(camera.cameras || [])]) {
+            c.layers.enable(firstPersonOnlyLayer);
+            c.layers.disable(thirdPersonOnlyLayer);
+          }
+          playerController.isVR = true;
+        });
+        renderer.xr.addEventListener("sessionend", () => {
+          ctx.camera.position.copy(lastPos);
+          playerController.isVR = false;
+        });
+      };
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", main);
+      } else {
+        main();
+      }
+    </script>
+  </head>
+  <body>
+    <gui-2d></gui-2d>
+  </body>
+</html>

@@ -1,0 +1,134 @@
+.gui2d-wrapper {
+  --stroke-width: 1.5px;
+
+  pointer-events: none;
+  user-select: none;
+}
+.loading-container {
+  z-index: 2;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: none;
+}
+.loading-container.active {
+  display: block;
+}
+.loading-container svg {
+  display: block;
+  width: 40px;
+}
+.loading-container.active ~ .gui {
+  display: none;
+}
+.gui {
+  z-index: 2;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+@media (hover: none) and (min-width: 768px) {
+  .gui {
+    bottom: 30px;
+    left: 30px;
+  }
+}
+.gui button {
+  pointer-events: auto;
+  width: fit-content;
+  padding: 0.3em 0.3em;
+  border: var(--stroke-width) solid #fff;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  opacity: 0.5;
+  outline: none;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.gui button:hover {
+  opacity: 1;
+}
+.gui svg {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.gui svg,
+.gui svg * {
+  stroke-width: var(--stroke-width);
+}
+.gui.mic-on .mic-on-button,
+.gui:not(.mic-on) .mic-off-button,
+.gui.voice-open .voice-open-button,
+.gui:not(.voice-open) .voice-close-button,
+.gui:not(.voice-open) .voice-volume-control,
+.gui:not(.voice-open) .voice-state-wrap,
+.gui.bgm-open .bgm-open-button,
+.gui:not(.bgm-open) .bgm-close-button,
+.gui:not(.bgm-open) .bgm-volume-control,
+.gui:not(.bgm-open) .bgm-state-wrap,
+.gui.mirror-on .mirror-on-button,
+.gui:not(.mirror-on) .mirror-off-button,
+.gui.mirror-disabled .mirror-on-button,
+.gui.mirror-disabled .mirror-off-button,
+.gui.mic-disabled .mic-on-button,
+.gui.mic-disabled .mic-off-button,
+.gui.bgm-disabled .wrap-bgm,
+.gui.voice-disabled .wrap-voice {
+  display: none;
+}
+
+.wrap-bgm,
+.wrap-voice {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.2em;
+  color: #fff;
+}
+.gui input[type="range"] {
+  pointer-events: auto;
+  user-select: auto;
+  accent-color: #fff;
+}
+.voice-close-button,
+.voice-open-button,
+.bgm-close-button,
+.bgm-open-button,
+.bgm-state-wrap,
+.voice-state-wrap {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+}
+.voice-close-button > svg,
+.voice-open-button > svg,
+.bgm-close-button > svg,
+.bgm-open-button > svg,
+.bgm-state-wrap > svg,
+.voice-state-wrap > svg {
+  grid-area: 1 / 1 / span 1 / span 1;
+}
+.voice-close-button > svg,
+.voice-open-button > svg,
+.bgm-close-button > svg,
+.bgm-open-button > svg {
+  visibility: hidden;
+}
+.gui.voice-mute .voice-close-button > svg:nth-of-type(1),
+.gui.voice-mute .voice-open-button > svg:nth-of-type(1),
+.gui.bgm-mute .bgm-close-button > svg:nth-of-type(1),
+.gui.bgm-mute .bgm-open-button > svg:nth-of-type(1) {
+  visibility: unset;
+}
+.gui:not(.voice-mute) .voice-close-button > svg:nth-of-type(2),
+.gui:not(.voice-mute) .voice-open-button > svg:nth-of-type(2),
+.gui:not(.bgm-mute) .bgm-close-button > svg:nth-of-type(2),
+.gui:not(.bgm-mute) .bgm-open-button > svg:nth-of-type(2) {
+  visibility: unset;
+}
