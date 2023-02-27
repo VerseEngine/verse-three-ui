@@ -353,6 +353,9 @@ export class AvatarDialog extends BaseElement {
     this._saveSubMessageEl.innerText = "";
     try {
       const resp = await fetch(url);
+      if (!resp.ok) {
+        return;
+      }
       const contentLength = parseInt(resp.headers.get("Content-Length") || "");
       const reader = resp.body?.getReader();
       if (!reader) {
