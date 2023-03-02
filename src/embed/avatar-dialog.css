@@ -11,7 +11,7 @@ dialog {
   --ui-color-disable: rgba(0, 0, 0, 0.1);
 
   font-family: var(--font-family);
-  padding: 2.4em;
+  padding: 2.4rem;
   min-width: 300px;
   pointer-events: auto;
   user-select: auto;
@@ -54,6 +54,9 @@ input::placeholder,
 }
 .button[disabled] {
   background: var(--ui-color-disable);
+}
+.button:focus-visible {
+  outline: none;
 }
 .icon-button {
   padding: 0.6rem;
@@ -170,4 +173,44 @@ input[type="url"].active,
 .save-sub-message {
   text-align: center;
   line-height: 1.5;
+}
+
+.avatar-preset-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 4rem;
+  max-height: min(60vw, 350px);
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+}
+.avatar-preset-list:has(:only-child) {
+  grid-template-columns: 1fr;
+  place-items: center;
+}
+.avatar-preset-list:has(:nth-child(2)) {
+  grid-template-columns: 1fr 1fr;
+}
+.avatar-preset-list:has(:nth-child(3)) {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.avatar-preset-list img {
+  width: 23vw;
+  max-width: 150px;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  transition: border 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  border: 3px solid rgb(77, 144, 254, 0);
+}
+.avatar-preset-list img:hover {
+  border: 3px solid rgb(77, 144, 254, 1);
+}
+.avatar-preset-list:has(:only-child) img {
+  width: 40vw;
+}
+.avatar-preset-list:has(:nth-child(2)) img {
+  width: 40vw;
+}
+.avatar-preset-list:has(:nth-child(3)) img {
+  width: 23vw;
 }

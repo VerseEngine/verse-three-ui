@@ -1,4 +1,5 @@
 export type { GuiHandlers } from "./gui-handler";
+export type { PresetAvatar } from "./avatar";
 export {
   Gui2DElement,
   ButtonType,

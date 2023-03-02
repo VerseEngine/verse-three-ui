@@ -123,6 +123,33 @@
       function setupGui2D() {
         const gui2d = document.querySelector("gui-2d");
         gui2d.setGuiHandlers(mockGuiHandlers);
+        const avatarURL = "asset/avatar/f0.vrm";
+        gui2d.setPresetAvatars([
+          {
+            thumbnailURL: "asset/avatar/f0.png",
+            avatarURL,
+          },
+          {
+            thumbnailURL: "asset/avatar/f1.png",
+            avatarURL,
+          },
+          {
+            thumbnailURL: "asset/avatar/f2.png",
+            avatarURL,
+          },
+          {
+            thumbnailURL: "asset/avatar/m0.png",
+            avatarURL,
+          },
+          {
+            thumbnailURL: "asset/avatar/m1.png",
+            avatarURL,
+          },
+          {
+            thumbnailURL: "asset/avatar/m2.png",
+            avatarURL,
+          },
+        ]);
         mockGuiHandlers.addModifiedListener(() => gui2d.updateStates());
 
         setTimeout(() => {

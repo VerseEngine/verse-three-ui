@@ -26,6 +26,7 @@
 |  [ClickableObject](./verse-three-ui.clickableobject.md) | THREE.Object3D with event handler added to act as a button |
 |  [Gui3DOptions](./verse-three-ui.gui3doptions.md) |  |
 |  [GuiHandlers](./verse-three-ui.guihandlers.md) | Data input/output interface common to Gui2D and Gui3D. |
+|  [PresetAvatar](./verse-three-ui.presetavatar.md) | Preset Avatar |
 
 ## Variables
 

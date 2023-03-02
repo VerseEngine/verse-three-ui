@@ -1,18 +1,19 @@
 import type { GuiHandlers } from "../gui-handler";
+import type { PresetAvatar } from "../avatar";
 import * as assets from "../assets";
 import { BaseElement } from "./base-element";
 
 const RPM_SUB_DOMAIN = "multiverse";
 
 export class AvatarDialog extends BaseElement {
-  _handlers?: GuiHandlers;
-  _rpmFrame?: HTMLIFrameElement;
-  _vrmUrlInput: HTMLInputElement;
-  _vrmFileInput: HTMLInputElement;
-  _vrmOkButton: HTMLButtonElement;
-  _pageStack: string[] = [];
-  _saveMessageEl: HTMLElement;
-  _saveSubMessageEl: HTMLElement;
+  private _handlers?: GuiHandlers;
+  private _rpmFrame?: HTMLIFrameElement;
+  private _vrmUrlInput: HTMLInputElement;
+  private _vrmFileInput: HTMLInputElement;
+  private _vrmOkButton: HTMLButtonElement;
+  private _pageStack: string[] = [];
+  private _saveMessageEl: HTMLElement;
+  private _saveSubMessageEl: HTMLElement;
 
   static register(name = "avatar-dialog") {
     customElements.define(name, AvatarDialog);
@@ -29,7 +30,7 @@ export class AvatarDialog extends BaseElement {
     const wrapper = document.createElement("div");
     wrapper.classList.add("gui2d-wrapper");
     wrapper.innerHTML = `
-<dialog id="avatar-dialog" aria-labelledby="avatar-dialog-title">
+<dialog id="avatar-dialog" aria-labelledby="avatar-dialog-title" autofocus>
   <button class="button icon-button avatar-dialog-close-button" type="button">${
     assets.cancelSvg
   }</button>
@@ -38,6 +39,7 @@ export class AvatarDialog extends BaseElement {
   }</button>
   <h3 id="avatar-dialog-title">${texts.get("Change Avatar")}</h3>
   <div class="avatar-dialog-page avatar-dialog-page-type">
+    <div class="avatar-preset-list"></div>
     <div class="avatar-type-button-list">
       <div>
           <button class="button avatar-type-button avatar-type-button-rpm" type="button">Ready Player Me</button>
@@ -142,20 +144,21 @@ export class AvatarDialog extends BaseElement {
       }
     });
   }
-  showModal(handlers?: GuiHandlers) {
+  showModal(handlers?: GuiHandlers, presetAvatars?: PresetAvatar[]) {
     this._handlers = handlers;
+    this._setupPresets(presetAvatars);
     this._showPage("avatar-dialog-page-type");
     this._dialogEl.showModal();
   }
-  get _dialogEl(): HTMLDialogElement {
+  private get _dialogEl(): HTMLDialogElement {
     return this._getEl("#avatar-dialog") as HTMLDialogElement;
   }
-  _hideAllPage() {
+  private _hideAllPage() {
     for (const el of this._getElAll(".avatar-dialog-page")) {
       el.classList.remove("active");
     }
   }
-  _showPage(name: string) {
+  private _showPage(name: string) {
     this._pageStack.push(name);
     this._hideAllPage();
     this._getEl(`.${name}`)?.classList?.add("active");
@@ -168,7 +171,25 @@ export class AvatarDialog extends BaseElement {
       this._getEl(".avatar-dialog-close-button")?.classList.add("hide");
     }
   }
-  _showRpm() {
+  private _setupPresets(presetAvatars?: PresetAvatar[]) {
+    const container = this._getEl(".avatar-preset-list") as HTMLElement;
+    container.innerHTML = "";
+    if (!presetAvatars || presetAvatars.length === 0) {
+      container.classList.add("hide");
+      return;
+    }
+    container.classList.remove("hide");
+    for (const v of presetAvatars) {
+      const img = document.createElement("img") as HTMLImageElement;
+      img.setAttribute("area", "button");
+      img.src = v.thumbnailURL;
+      img.addEventListener("click", () => {
+        this._setAvatarURL(v.avatarURL);
+      });
+      container.appendChild(img);
+    }
+  }
+  private _showRpm() {
     if (this._rpmFrame) {
       this._rpmFrame.parentNode?.removeChild(this._rpmFrame);
     }
@@ -182,10 +203,10 @@ export class AvatarDialog extends BaseElement {
 
     this._showPage("avatar-dialog-page-rpm");
   }
-  _showVrm() {
+  private _showVrm() {
     this._showPage("avatar-dialog-page-vrm");
   }
-  _showSave() {
+  private _showSave() {
     this._getEl(".loading-wrap")?.classList.remove("hide");
     this._getEl(".failed-wrap")?.classList.add("hide");
     this._getEl(".avatar-dialog-back-button")?.setAttribute(
@@ -194,11 +215,11 @@ export class AvatarDialog extends BaseElement {
     );
     this._showPage("avatar-dialog-page-save");
   }
-  _close() {
+  private _close() {
     this._reset();
     this._dialogEl.close();
   }
-  _back() {
+  private _back() {
     this._pageStack.pop();
     const name = this._pageStack.pop();
     if (!name) {
@@ -209,7 +230,7 @@ export class AvatarDialog extends BaseElement {
     }
     this._showPage(name);
   }
-  _reset() {
+  private _reset() {
     const frame = this._rpmFrame;
     setTimeout(() => {
       if (frame && frame === this._rpmFrame) {
@@ -221,7 +242,7 @@ export class AvatarDialog extends BaseElement {
     this._vrmFileInput.value = "";
     this._updateVrmForm();
   }
-  _updateVrmForm() {
+  private _updateVrmForm() {
     if (this._validVrmForm) {
       this._vrmOkButton.removeAttribute("disabled");
     } else {
@@ -251,21 +272,21 @@ export class AvatarDialog extends BaseElement {
       this._vrmFileInput.parentElement?.classList.remove("active");
     }
   }
-  get _vrmFileInputValue(): File | undefined {
+  private get _vrmFileInputValue(): File | undefined {
     if (this._vrmFileInput.files && this._vrmFileInput.files.length > 0) {
       return this._vrmFileInput.files[0];
     }
   }
-  get _vrmUrlInputValue(): string {
+  private get _vrmUrlInputValue(): string {
     return this._vrmUrlInput.value.trim();
   }
-  get _isVrmFileInputEmpty() {
+  private get _isVrmFileInputEmpty() {
     return !(this._vrmFileInput.files && this._vrmFileInput.files.length > 0);
   }
-  get _isVrmUrlInputEmpty() {
+  private get _isVrmUrlInputEmpty() {
     return this._vrmUrlInputValue.length === 0;
   }
-  get _validVrmForm() {
+  private get _validVrmForm() {
     if (!this._isVrmFileInputEmpty) {
       return true;
     }
@@ -274,13 +295,13 @@ export class AvatarDialog extends BaseElement {
     }
     return false;
   }
-  _setupRpm() {
+  private _setupRpm() {
     const subscribe = this._rpmSubscribe.bind(this);
     window.addEventListener("message", subscribe);
     document.addEventListener("message", subscribe);
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _rpmSubscribe(event: any) {
+  private _rpmSubscribe(event: any) {
     const json = parseJson(event.data);
 
     if (json?.source !== "readyplayerme") {
@@ -303,7 +324,7 @@ export class AvatarDialog extends BaseElement {
       this._setAvatarURL(json.data.url);
     }
   }
-  async _setAvatarData(data: ArrayBuffer) {
+  private async _setAvatarData(data: ArrayBuffer) {
     this._showSave();
     this._saveMessageEl.innerText = this._texts.get("Setting...");
     this._saveSubMessageEl.innerText = "";
@@ -319,7 +340,7 @@ export class AvatarDialog extends BaseElement {
     }
     this._close();
   }
-  async _setAvatarURL(url: string) {
+  private async _setAvatarURL(url: string) {
     this._showSave();
     this._saveMessageEl.innerText = this._texts.get("Downloading...");
 
@@ -342,14 +363,14 @@ export class AvatarDialog extends BaseElement {
     }
     this._close();
   }
-  _setSaveError(msg: string, subMsg?: string) {
+  private _setSaveError(msg: string, subMsg?: string) {
     this._getEl(".loading-wrap")?.classList.add("hide");
     this._getEl(".failed-wrap")?.classList.remove("hide");
     this._saveMessageEl.innerText = msg;
     this._saveSubMessageEl.innerText = subMsg || "";
     this._getEl(".avatar-dialog-back-button")?.removeAttribute("disabled");
   }
-  async _download(url: string): Promise<ArrayBuffer | undefined> {
+  private async _download(url: string): Promise<ArrayBuffer | undefined> {
     this._saveSubMessageEl.innerText = "";
     try {
       const resp = await fetch(url);

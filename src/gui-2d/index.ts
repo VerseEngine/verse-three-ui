@@ -1,4 +1,5 @@
 import type { GuiHandlers } from "../gui-handler";
+import type { PresetAvatar } from "../avatar";
 import * as assets from "../assets";
 import { BaseElement } from "./base-element";
 import { AvatarDialog } from "./avatar-dialog";
@@ -60,6 +61,7 @@ const DISABLE_FLAGS = [
  */
 export class Gui2DElement extends BaseElement {
   private _handlers?: GuiHandlers;
+  private _presetAvatars?: PresetAvatar[];
   private _volumeControlOpenHandler?: () => void;
   private _updateStates: Array<() => void> = [];
   private _bgmType: ButtonTypeT = BUTTON_TYPE_DEFAULT;
@@ -185,6 +187,12 @@ export class Gui2DElement extends BaseElement {
   setGuiHandlers(handlers: GuiHandlers) {
     this._handlers = handlers;
     this.updateStates();
+  }
+  /**
+   * Set Preset Avatars
+   */
+  setPresetAvatars(presetAvatars?: PresetAvatar[]) {
+    this._presetAvatars = presetAvatars;
   }
   /**
    * Used to enable audio playback at the timing of the user's click
@@ -326,7 +334,7 @@ export class Gui2DElement extends BaseElement {
     });
     this._on(".avatar-dialog-button", "click", () => {
       const avatarDialog = this._getEl("avatar-dialog") as AvatarDialog;
-      avatarDialog.showModal(this._handlers);
+      avatarDialog.showModal(this._handlers, this._presetAvatars);
     });
   }
 }

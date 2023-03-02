@@ -50,6 +50,7 @@ guiHandlers.addModifiedListener(() => gui2d.updateStates());
 |  [register(name)](./verse-three-ui.gui2delement.register.md) | <code>static</code> | Register Web Components. |
 |  [setGuiHandlers(handlers)](./verse-three-ui.gui2delement.setguihandlers.md) |  | Set GuiHandlers |
 |  [setOnVolumeControlOpen(handler)](./verse-three-ui.gui2delement.setonvolumecontrolopen.md) |  | Used to enable audio playback at the timing of the user's click |
+|  [setPresetAvatars(presetAvatars)](./verse-three-ui.gui2delement.setpresetavatars.md) |  | Set Preset Avatars |
 |  [showLoading()](./verse-three-ui.gui2delement.showloading.md) |  | Show loading indicator |
 |  [updateStates()](./verse-three-ui.gui2delement.updatestates.md) |  | Reflect the state of GuiHandlers in the UI |
 
