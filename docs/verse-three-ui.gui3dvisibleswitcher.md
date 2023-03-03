@@ -4,7 +4,12 @@
 
 ## Gui3DVisibleSwitcher class
 
-Show and hide Gui3D. Display if you look down diagonally.
+Show and hide Gui3D.
+
+```
+- Head gesture looking diagonally down to display GUI.
+- A, X buttons on Quest, etc., Menu button on VIVE focus (buttons[4]).
+```
 
 **Signature:**
 

@@ -11,7 +11,12 @@
 |  [BaseElement](./verse-three-ui.baseelement.md) | Base class for Web Components. |
 |  [Gui2DElement](./verse-three-ui.gui2delement.md) | HTMLElement of gui-2d. |
 |  [Gui3D](./verse-three-ui.gui3d.md) | Configuration UI for VR. |
-|  [Gui3DVisibleSwitcher](./verse-three-ui.gui3dvisibleswitcher.md) | Show and hide Gui3D. Display if you look down diagonally. |
+|  [Gui3DVisibleSwitcher](./verse-three-ui.gui3dvisibleswitcher.md) | <p>Show and hide Gui3D.</p>
+```
+- Head gesture looking diagonally down to display GUI.
+- A, X buttons on Quest, etc., Menu button on VIVE focus (buttons[4]).
+```
+ |
 
 ## Functions
 
