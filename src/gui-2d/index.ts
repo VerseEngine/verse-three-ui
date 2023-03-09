@@ -35,8 +35,9 @@ export const isValidButtonType = (s: string): s is ButtonTypeT => {
 };
 
 // For crossorigin's source, there is no way to adjust volume in iOS Safari. (GainNode is not available in Mac Safari, but can be changed with Audio.volume)
-const TYPE_FLAGS = ["bgm-type"];
+const PROP_FLAGS = ["bgm-type", "preset-avatar-only"];
 const DISABLE_FLAGS = [
+  "avatar-disabled",
   "mirror-disabled",
   "mic-disabled",
   "bgm-disabled",
@@ -65,6 +66,7 @@ export class Gui2DElement extends BaseElement {
   private _volumeControlOpenHandler?: () => void;
   private _updateStates: Array<() => void> = [];
   private _bgmType: ButtonTypeT = BUTTON_TYPE_DEFAULT;
+  private _isPresetAvatarOnly = false;
 
   /**
    * Register Web Components.
@@ -79,7 +81,7 @@ export class Gui2DElement extends BaseElement {
    * {@link https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements|Using custom elements}
    */
   static get observedAttributes() {
-    return [...DISABLE_FLAGS, ...TYPE_FLAGS, ...BaseElement.observedAttributes];
+    return [...DISABLE_FLAGS, ...PROP_FLAGS, ...BaseElement.observedAttributes];
   }
 
   constructor() {
@@ -166,6 +168,8 @@ export class Gui2DElement extends BaseElement {
         );
       }
       return;
+    } else if ("preset-avatar-only" == attrName) {
+      this._isPresetAvatarOnly = newVal !== null && newVal !== "false";
     }
     super.attributeChangedCallback(attrName, _oldVal, newVal);
   }
@@ -334,7 +338,11 @@ export class Gui2DElement extends BaseElement {
     });
     this._on(".avatar-dialog-button", "click", () => {
       const avatarDialog = this._getEl("avatar-dialog") as AvatarDialog;
-      avatarDialog.showModal(this._handlers, this._presetAvatars);
+      avatarDialog.showModal(
+        this._handlers,
+        this._presetAvatars,
+        this._isPresetAvatarOnly
+      );
     });
   }
 }

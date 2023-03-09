@@ -144,8 +144,17 @@ export class AvatarDialog extends BaseElement {
       }
     });
   }
-  showModal(handlers?: GuiHandlers, presetAvatars?: PresetAvatar[]) {
+  showModal(
+    handlers?: GuiHandlers,
+    presetAvatars?: PresetAvatar[],
+    isPresetAvatarOnly?: boolean
+  ) {
     this._handlers = handlers;
+    if (isPresetAvatarOnly) {
+      this._getEl(".avatar-type-button-list")?.classList.add("hide");
+    } else {
+      this._getEl(".avatar-type-button-list")?.classList.remove("hide");
+    }
     this._setupPresets(presetAvatars);
     this._showPage("avatar-dialog-page-type");
     this._dialogEl.showModal();

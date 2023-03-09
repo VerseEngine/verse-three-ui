@@ -71,6 +71,8 @@ Configuration UI for non-VR.
 ### gui-2d Parameters
 | parameter | type    | description                                      |
 | --------- | ------- | ------------------------------------------------ |
+| `avatar-disabled` | boolean | Hide Avatar button |
+| `preset-avatar-only` | boolean | Only avatars in a preset list can be selected. |
 | `bgm-type` | `toggle` or `slider` | For crossorigin's source, there is no way to adjust volume in iOS Safari. (GainNode is not available in Mac Safari, but can be changed with Audio.volume) |
 | `bgm-disabled` | boolean | Hide BGM button |
 | `mic-disabled` | boolean | Hide Mic button |

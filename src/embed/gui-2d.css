@@ -74,6 +74,7 @@
 .gui:not(.bgm-open) .bgm-state-wrap,
 .gui.mirror-on .mirror-on-button,
 .gui:not(.mirror-on) .mirror-off-button,
+.gui.avatar-disabled .avatar-dialog-button,
 .gui.mirror-disabled .mirror-on-button,
 .gui.mirror-disabled .mirror-off-button,
 .gui.mic-disabled .mic-on-button,
