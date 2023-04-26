@@ -8,5 +8,5 @@
 
 |  Package | Description |
 |  --- | --- |
-|  [verse-three-ui](./verse-three-ui.md) |  |
+|  [@verseengine/verse-three-ui](./verse-three-ui.md) |  |
 
