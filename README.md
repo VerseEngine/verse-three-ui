@@ -73,7 +73,7 @@ Configuration UI for non-VR.
 | --------- | ------- | ------------------------------------------------ |
 | `avatar-disabled` | boolean | Hide Avatar button |
 | `preset-avatar-only` | boolean | Only avatars in a preset list can be selected. |
-| `bgm-type` | `toggle` or `slider` | For crossorigin's source, there is no way to adjust volume in iOS Safari. (GainNode is not available in Mac Safari, but can be changed with Audio.volume) |
+| `bgm-type` | `toggle` or `slider` | For cross origin's source, there is no way to adjust the volume in iOS Safari. (GainNode is not available in Mac Safari but can be changed with Audio.volume) |
 | `bgm-disabled` | boolean | Hide BGM button |
 | `mic-disabled` | boolean | Hide Mic button |
 | `voice-disabled` | boolean | Hide Voice button |
