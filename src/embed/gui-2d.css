@@ -37,7 +37,9 @@
     left: 30px;
   }
 }
-.gui button {
+.gui button,
+::slotted(button[slot="before"]),
+::slotted(button[slot="after"]) {
   pointer-events: auto;
   width: fit-content;
   padding: 0.3em 0.3em;
@@ -51,7 +53,9 @@
   background-color: rgba(0, 0, 0, 0.1);
   transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.gui button:hover {
+.gui button:hover,
+::slotted(button[slot="before"]:hover),
+::slotted(button[slot="after"]:hover) {
   opacity: 1;
 }
 .gui svg {

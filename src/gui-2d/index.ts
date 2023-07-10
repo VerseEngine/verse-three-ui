@@ -93,27 +93,28 @@ export class Gui2DElement extends BaseElement {
     wrapper.innerHTML = `
 <div class="loading-container">${assets.loadingSvg}</div>
 <div class="gui">
+  <slot name="before"></slot>
   <button class="avatar-dialog-button" title="${texts.getAttr(
-    "Change Avatar"
+    "Change Avatar",
   )}">${assets.changeAvatarSvg}</button>
   <button class="mirror-off-button" title="${texts.getAttr("Hide Mirror")}">${
-      assets.mirrorOffSvg
-    }</button>
+    assets.mirrorOffSvg
+  }</button>
   <button class="mirror-on-button" title="${texts.getAttr("Show Mirror")}">${
-      assets.mirrorOnSvg
-    }</button>
+    assets.mirrorOnSvg
+  }</button>
   <button class="mic-off-button" title="${texts.getAttr("Mic Off")}">${
-      assets.micOffSvg
-    }</button>
+    assets.micOffSvg
+  }</button>
   <button class="mic-on-button" title="${texts.getAttr("Mic On")}">${
-      assets.micOnSvg
-    }</button>
+    assets.micOnSvg
+  }</button>
   <div class="wrap-voice">
     <button class="voice-close-button" title="${texts.getAttr(
-      "Close voice volume control"
+      "Close voice volume control",
     )}">${assets.voiceMuteSvg}${assets.voiceSvg}</button>
     <button class="voice-open-button" title="${texts.getAttr(
-      "Open voice volume control"
+      "Open voice volume control",
     )}">${assets.voiceMuteSvg}${assets.voiceSvg}</button>
     <input class="voice-volume-control" type="range" min="0" max="1.0" step="0.1" />
     <div class="voice-state-wrap">
@@ -125,10 +126,10 @@ export class Gui2DElement extends BaseElement {
   </div>
   <div class="wrap-bgm">
     <button class="bgm-close-button" title="${texts.getAttr(
-      "Close bgm volume control"
+      "Close bgm volume control",
     )}">${assets.bgmMuteSvg}${assets.bgmSvg}</button>
     <button class="bgm-open-button" title="${texts.getAttr(
-      "Open bgm volume control"
+      "Open bgm volume control",
     )}">${assets.bgmMuteSvg}${assets.bgmSvg}</button>
     <input class="bgm-volume-control" type="range" min="0" max="1.0" step="0.1" />
     <div class="bgm-state-wrap">
@@ -138,6 +139,7 @@ export class Gui2DElement extends BaseElement {
       ${assets.volume3Svg}
     </div>
   </div>
+  <slot name="after"></slot>
 </div>
 <avatar-dialog 
   css-src="${this.getAttribute("css-src") || ""}"
@@ -163,8 +165,8 @@ export class Gui2DElement extends BaseElement {
       } else {
         console.warn(
           `invalid ${attrName}. required: ${Object.values(ButtonType).join(
-            " or "
-          )}`
+            " or ",
+          )}`,
         );
       }
       return;
@@ -322,8 +324,8 @@ export class Gui2DElement extends BaseElement {
       this._handlers?.setBgmVolume?.(
         Math.max(
           Math.min(parseFloat((e.target as HTMLInputElement).value) || 0, 1),
-          0
-        )
+          0,
+        ),
       );
       updateBgmState();
     });
@@ -331,8 +333,8 @@ export class Gui2DElement extends BaseElement {
       this._handlers?.setVoiceVolume?.(
         Math.max(
           Math.min(parseFloat((e.target as HTMLInputElement).value) || 0, 1),
-          0
-        )
+          0,
+        ),
       );
       updateVoiceState();
     });
@@ -341,7 +343,7 @@ export class Gui2DElement extends BaseElement {
       avatarDialog.showModal(
         this._handlers,
         this._presetAvatars,
-        this._isPresetAvatarOnly
+        this._isPresetAvatarOnly,
       );
     });
   }
@@ -362,7 +364,7 @@ function getCurrentIconIndex(numValues: number, value: number): number {
   return (
     Math.max(
       findLastIndex(values, (v: number) => value >= v),
-      0
+      0,
     ) + 1
   );
 }

@@ -84,7 +84,31 @@ if (document.readyState === "loading") {
 </body>
 ```
 
-
+### Custom Buttons
+```html
+<style>
+  .custom-button > span {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+</style>
+<gui-2d>
+  <button slot="before" class="custom-button" onclick="alert('A')">
+    <span>A</span>
+  </button>
+  <button slot="before" class="custom-button" onclick="alert('B')">
+    <span>B</span>
+  </button>
+  <button slot="after" class="custom-button" onclick="alert('a')">
+    <span>a</span>
+  </button>
+  <button slot="after" class="custom-button" onclick="alert('b')">
+    <span>b</span>
+  </button>
+</gui-2d>
+```
 # Reference
 
 ## API Reference
