@@ -1,4 +1,5 @@
-# verse-three-ui
+# verse-three-ui &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/VerseEngine/verse-three-ui/blob/main/LICENSE)  [![npm version](https://img.shields.io/npm/v/@verseengine%2Fverse-three-ui.svg?style=flat)](https://www.npmjs.com/package/@verseengine%2Fverse-three-ui)  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/VerseEngine/verse-three-ui/pulls)
+
 VerseEngine's GUI. 
 
 ## Example
